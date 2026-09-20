@@ -36,14 +36,22 @@ def train_model(
     epochs=150,
     lr=1e-3,
     device=None,
-    val_split=0.1,
+    val_split=0.0,
     seed=42,
     verbose=True,
 ):
     """Train on `dataset` and return (model, history).
 
-    A tail slice of the training set is held out for validation so the loss
-    curve shows whether the model is generalising rather than memorising.
+    `val_split` holds out a *tail* slice of the training set for validation.
+    It defaults to 0.0, and that default is deliberate: the data is
+    chronological, so the tail of the training set is the window immediately
+    before the test set and by far its most informative predictor. Holding it
+    out costs a lot of accuracy - on AAPL over 2020-01-01..2026-01-31, a 10%
+    holdout moves test RMSE from about $9.2 to about $19.
+
+    So: leave it at 0 to reproduce the reported numbers, and set it above 0
+    when you want a validation curve to check for overfitting, accepting that
+    the resulting test error is not comparable.
     """
     torch.manual_seed(seed)
     np.random.seed(seed)

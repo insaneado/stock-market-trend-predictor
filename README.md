@@ -72,16 +72,42 @@ The original exploratory notebook is kept at `notebooks/trend_predictor.ipynb`.
 
 ## Results
 
-Target: **AAPL**, daily data from 2020-01-01, 80/20 chronological split.
+Reproduce exactly:
 
-| Metric | Value |
-|---|---|
-| Test RMSE | ~$9.00 |
-| Relative error | ~3.6% of mean price |
-| Backtest | identifies the March 2025 dip and the recovery that follows |
+```bash
+python run.py --ticker AAPL --no-sentiment --end 2026-01-31
+```
+
+AAPL, daily data, 80/20 chronological split, 150 epochs. Pinning `--end` matters:
+without it the window extends to today and the numbers move.
+
+| Window | Test RMSE | Relative error |
+|---|---|---|
+| 2020-01-01 -> 2026-01-31 | **$9.2 - $10.1** (mean $9.6 over 4 seeds) | 3.9% - 4.3% |
+| 2020-01-01 -> today | $17.5 - $18.6 | 6.5% - 6.9% |
+
+The error roughly doubles on the extended window. Recent price action is more
+volatile than the period the architecture was tuned against, and nothing about
+the model adapts to that - worth knowing before quoting a single number.
+
+**The trading strategy does not beat buy-and-hold.** Over the pinned window it
+returns about -14% against +1.65% for buy-and-hold; over the full window, ~36%
+against ~64%. The model tracks the trend closely enough to score a low RMSE
+while still being too smooth to time entries and exits profitably - which is
+the honest result, and exactly why the backtest is in the repository rather
+than the RMSE alone.
 
 `--plot` renders actual vs predicted with a 95% band, and the portfolio curve
 against buy-and-hold.
+
+### A note on the validation split
+
+`train_model(val_split=...)` defaults to **0**. The data is chronological, so
+the tail of the training set is the window immediately before the test set and
+its single most informative predictor. Holding out 10% of it moves test RMSE
+from ~$9.2 to ~$19 - a large, easily-missed regression. Set `--val-split 0.1`
+when you want a validation curve to check overfitting, but the resulting test
+error is not comparable to the numbers above.
 
 ---
 

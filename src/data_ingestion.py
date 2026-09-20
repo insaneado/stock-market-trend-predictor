@@ -81,6 +81,7 @@ def create_sequences(data: np.ndarray, seq_length: int):
 def build_dataset(
     ticker: str = "AAPL",
     start: str = "2020-01-01",
+    end: str = None,
     sentiment_df: pd.DataFrame = None,
     features: list = None,
     seq_length: int = 30,
@@ -88,7 +89,7 @@ def build_dataset(
 ) -> Dataset:
     """Full ingestion pipeline: download -> merge -> split -> scale -> window."""
     features = features or DEFAULT_FEATURES
-    frame = merge_sentiment(fetch_prices(ticker, start), sentiment_df)
+    frame = merge_sentiment(fetch_prices(ticker, start, end), sentiment_df)
 
     missing = [f for f in features if f not in frame.columns]
     if missing:
