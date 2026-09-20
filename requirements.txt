@@ -1,17 +1,19 @@
-# Install the CPU-only PyTorch build. The default PyPI wheel bundles CUDA
-# and is several GB, which exceeds the build limits on free hosting tiers
-# (Streamlit Community Cloud, Hugging Face Spaces).
+# Runtime dependencies - what the deployed app and run.py need.
+# Test dependencies live in requirements-dev.txt.
+#
+# CPU-only PyTorch: the default PyPI wheel bundles CUDA and is several GB,
+# which exceeds the build limits on free hosting tiers.
 --extra-index-url https://download.pytorch.org/whl/cpu
 
 # Deep learning
 torch>=2.1.0
 
-# NLP / sentiment
+# NLP / sentiment (module 2)
 transformers>=4.35.0
-
-# Data
-yfinance>=0.2.40
 feedparser>=6.0.10
+
+# Data (module 1)
+yfinance>=0.2.40
 pandas>=2.0.0
 numpy>=1.24.0
 scikit-learn>=1.3.0
@@ -19,8 +21,5 @@ scikit-learn>=1.3.0
 # Web app
 streamlit>=1.30.0
 
-# Plots
+# Plots (module 4)
 matplotlib>=3.7.0
-
-# Tests
-pytest>=7.4.0

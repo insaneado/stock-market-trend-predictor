@@ -40,7 +40,8 @@ fills at the price already known at that step.
 ```bash
 git clone https://github.com/insaneado/stock-market-trend-predictor.git
 cd stock-market-trend-predictor
-pip install -r requirements.txt
+pip install -r requirements.txt          # runtime: the pipeline and the web app
+pip install -r requirements-dev.txt      # adds pytest
 ```
 
 Run the tests (fast, no network, no model download):
