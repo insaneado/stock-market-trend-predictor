@@ -68,6 +68,21 @@ Useful flags: `--no-sentiment` (price-only baseline), `--epochs`, `--seq-length`
 
 The original exploratory notebook is kept at `notebooks/trend_predictor.ipynb`.
 
+### Web app
+
+```bash
+streamlit run streamlit_app.py
+```
+
+Pick a ticker and window, run the pipeline, and read the metrics, the
+prediction band and the portfolio curve in the browser. It calls the same four
+modules as `run.py`.
+
+**Deploy it:** on [share.streamlit.io](https://share.streamlit.io), *New app* ->
+pick this repository -> main file `streamlit_app.py`. `requirements.txt`
+already pins the CPU-only PyTorch build, which keeps the image inside the free
+tier's build limits.
+
 ---
 
 ## Results
